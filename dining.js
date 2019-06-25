@@ -42,9 +42,11 @@ app.get("/dining", function (request, response) {
 
 app.get("/dining/:date", function (request, response) {
     // the code below works to bring back the chefs not booked on a particular date
+    // the ? is a placeholder for the value you need, this is then used in the [diningDate] thiing below. If you want to add more things to look at use 
     const query =
-        // the ? is a placeholder for the value you need, this is then used in the [diningDate] thiing below. If you want to add more things to look at use 
-        "SELECT MENU.menuId, MENU.chefId, CHEF.chefName, MENU.typeId, TYPE.typeCategory, MENU.menuCuisine, MENU.menuImageFPath, TYPE.typePricePerGuest FROM MENU JOIN TYPE ON MENU.typeId=TYPE.typeId JOIN CHEF ON MENU.chefId=CHEF.chefId WHERE MENU.chefId<>(SELECT chefid FROM BOOKING WHERE bookingDate=?)";
+        "SELECT MENU.menuId, MENU.chefId, CHEF.chefName, MENU.typeId, TYPE.typeCategory, MENU.menuCuisine, TYPE.typePricePerGuest FROM MENU JOIN TYPE ON MENU.typeId=TYPE.typeId JOIN CHEF ON MENU.chefId=CHEF.chefId WHERE MENU.chefId NOT IN (SELECT chefId FROM BOOKING WHERE BOOKING.bookingDate =?)";
+    // Original Query that worked now SUPERCEDED BY THE ONE ABOVE
+    // "SELECT MENU.menuId, MENU.chefId, CHEF.chefName, MENU.typeId, TYPE.typeCategory, MENU.menuCuisine, MENU.menuImageFPath, TYPE.typePricePerGuest FROM MENU JOIN TYPE ON MENU.typeId=TYPE.typeId JOIN CHEF ON MENU.chefId=CHEF.chefId WHERE MENU.chefId<>(SELECT chefid FROM BOOKING WHERE bookingDate=?)";
 
     const diningDate = request.params.date;
 
@@ -84,7 +86,7 @@ app.get("/menu/:cuisine", function (request, response) {
     });
 });
 
- 
+
 // app.delete("/tasks/:id", function(request, response) {
 //     const query =
 //       "DELETE FROM Task WHERE TaskId = " + connection.escape(request.params.id);
