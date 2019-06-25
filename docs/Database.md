@@ -1,7 +1,9 @@
 <!-- This file details the SQl commands used to set-up the Database, what Data was inserted & the queries we'd need to get the data --!>
 
 SQLCOMMANDS  FOR ChefAppDb DATABASE Created in MySql, Terminator 15/06
+
 REMEMBER: IF U WANT TO DELETE/UPDATE FROM A TABLE USE THIS SQL:
+
 DELETE FROM `table_name` [WHERE condition];
 
 UPDATE table_name SET column_name = new_value [WHERE condition];

@@ -3,20 +3,32 @@
 service: chefbackend 
 
 
-
+# This work includes the functions to be used to get the data back
+# in the dining.js file; the stuff in curly brackets such as 
+# are parameters that link to the variables to used in the dining.js
+# file for just to use for testing right now, refer to {cuisine}
 provider:
   name: aws
   runtime: nodejs10.x
   region: eu-west-2
 
 functions:
-  tasks:
+  dining:
     handler: dining.handler
     events:
       - http:
-          path: chefs
+          path: dining
           method: get
           cors: true
+      - http:
+          path: dining/{date}
+          method: get
+          cors: true   
+      - http:
+          path: menu/{cuisine}
+          method: get
+          cors: true      
+      
 # this is a plug-in we installed to help us run our API off-line for testing development work
 plugins:
   - serverless-offline
