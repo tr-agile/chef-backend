@@ -44,7 +44,7 @@ app.get("/dining/:date", function (request, response) {
     // the code below works to bring back the chefs not booked on a particular date
     // the ? is a placeholder for the value you need, this is then used in the [diningDate] thiing below. If you want to add more things to look at use 
     const query =
-        "SELECT MENU.menuId, MENU.chefId, CHEF.chefName, MENU.typeId, TYPE.typeCategory, MENU.menuImageFPath, MENU.menuCuisine, TYPE.typePricePerGuest FROM MENU JOIN TYPE ON MENU.typeId=TYPE.typeId JOIN CHEF ON MENU.chefId=CHEF.chefId WHERE MENU.chefId NOT IN (SELECT chefId FROM BOOKING WHERE BOOKING.bookingDate =?)";
+        "SELECT MENU.menuId, MENU.chefId, CHEF.chefName, MENU.typeId, TYPE.typeCategory, MENU.menuImageFPath, MENU.menuCuisine, MENU.menuMeals, TYPE.typePricePerGuest FROM MENU JOIN TYPE ON MENU.typeId=TYPE.typeId JOIN CHEF ON MENU.chefId=CHEF.chefId WHERE MENU.chefId NOT IN (SELECT chefId FROM BOOKING WHERE BOOKING.bookingDate =?)";
     // Original Query that worked now SUPERCEDED BY THE ONE ABOVE
     // "SELECT MENU.menuId, MENU.chefId, CHEF.chefName, MENU.typeId, TYPE.typeCategory, MENU.menuCuisine, MENU.menuImageFPath, TYPE.typePricePerGuest FROM MENU JOIN TYPE ON MENU.typeId=TYPE.typeId JOIN CHEF ON MENU.chefId=CHEF.chefId WHERE MENU.chefId<>(SELECT chefid FROM BOOKING WHERE bookingDate=?)";
 
@@ -68,6 +68,7 @@ app.get("/menu/:cuisine", function (request, response) {
     // you have to remember to change the GET path on your serverless.yml file if you want to add a new parameter search.
     const query =
         // the ? is a placeholder for the value you need, this is then used in the [diningDate] thiing below. If you want to add more things to look at use 
+        // "SELECT MENU.menuId, MENU.chefId, CHEF.chefName, MENU.typeId, TYPE.typeCategory, MENU.menuImageFPath, MENU.menuCuisine, TYPE.typePricePerGuest FROM MENU JOIN TYPE ON MENU.typeId=TYPE.typeId JOIN CHEF ON MENU.chefId=CHEF.chefId WHERE MENU.menuCuisine=?";
         "SELECT MENU.menuId, MENU.chefId, CHEF.chefName, MENU.menuCuisine FROM MENU JOIN CHEF ON MENU.chefId=CHEF.chefId WHERE MENU.menuCuisine=?";
 
     const cuisineCheck = request.params.cuisine;
@@ -85,6 +86,28 @@ app.get("/menu/:cuisine", function (request, response) {
         }
     });
 });
+// only do the code below if we get the other front-end stuff done To add a filter for Cuisine & Date
+// YOU WOULD ALSO NEED TO ADD A NEW PATH IN serverless.yml like path:menu/{cuisine}/{date}
+// test query to see what happens with multiple search parameters; remember you will one ? plus one associated array in the connection.query() etc see above for example to hold values
+// you have to remember to change the GET path on your serverless.yml file if you want to add a new parameter search.
+// app.get("/menu/:cuisine/:date", function (request, response) {
+//     const query =
+// "SELECT MENU.menuId, MENU.chefId, CHEF.chefName, MENU.typeId, TYPE.typeCategory, MENU.menuImageFPath, MENU.menuCuisine, TYPE.typePricePerGuest FROM MENU JOIN TYPE ON MENU.typeId=TYPE.typeId JOIN CHEF ON MENU.chefId=CHEF.chefId WHERE MENU.menuCuisine=? AND MENU.chefId NOT IN (SELECT chefId FROM BOOKING WHERE BOOKING.bookingDate =?)";
+// const cuisineCheck = request.params.cuisine;
+// const dateCheck = request.params.date;
+// connection.query(query, [dateCheck, cuisineCheck], (err, queryResults) => {
+//     if (err) {
+//         console.log("Error fetching menus", err);
+//         response.status(500).json({
+//             error: err
+//         });
+//     } else {
+//         response.json({
+//             dining: queryResults
+//         });
+//     }
+// });
+
 
 
 // app.delete("/tasks/:id", function(request, response) {
